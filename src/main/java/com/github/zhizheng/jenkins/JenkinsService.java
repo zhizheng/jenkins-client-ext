@@ -136,7 +136,7 @@ public interface JenkinsService {
     public void downloadFile(String jobName, String relativePath, String destPath) throws JenkinsException;
     
     /**
-     * create Credentials
+     * create Credentials(default)
      * 
      * @param id
      * @param username
@@ -145,6 +145,28 @@ public interface JenkinsService {
      * @throws JenkinsException 
      */
     public void createCredentials(String id, String username, String password, String desc) throws JenkinsException;
+    
+    /**
+     * create Credentials(json format)
+     * 
+     * @param id
+     * @param username
+     * @param password
+     * @param desc
+     * @throws JenkinsException 
+     */
+    public void createCredentialsByJson(String id, String username, String password, String desc) throws JenkinsException;
+    
+    /**
+     * create Credentials(xml format)
+     * 
+     * @param id
+     * @param username
+     * @param password
+     * @param desc
+     * @throws JenkinsException 
+     */
+    public void createCredentialsByXml(String id, String username, String password, String desc) throws JenkinsException;
     
     /**
      * delete Credentials

@@ -270,10 +270,32 @@ public class JenkinsServiceImpl implements JenkinsService {
 
 	@Override
 	public void createCredentials(String id, String username, String password, String desc) throws JenkinsException {
+		createCredentialsByJson(id, username, password, desc);
+	}
+	
+	@Override
+	public void createCredentialsByJson(String id, String username, String password, String desc) throws JenkinsException {
 		try {
-    		JenkinsHttpClient client = new JenkinsHttpClient(new URI(jenkinsUrl), jenkinsUser, jenkinsPassword);
-    		String req = "json={\"\":\"0\",\"credentials\":{\"scope\":\"GLOBAL\",\"username\":\""+username+"\",\"password\":\""+password+"\",\"id\":\""+id+"\",\"description\":\""+desc+"\",\"$class\":\"com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl\"}}";
-    		client.post_text("credentials/store/system/domain/_/createCredentials", req, ContentType.APPLICATION_FORM_URLENCODED,  true);
+			JenkinsHttpClient client = new JenkinsHttpClient(new URI(jenkinsUrl), jenkinsUser, jenkinsPassword);
+			String req = "json={\"\":\"0\",\"credentials\":{\"scope\":\"GLOBAL\",\"username\":\""+username+"\",\"password\":\""+password+"\",\"id\":\""+id+"\",\"description\":\""+desc+"\",\"$class\":\"com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl\"}}";
+			client.post_text("credentials/store/system/domain/_/createCredentials", req, ContentType.APPLICATION_FORM_URLENCODED,  true);
+		} catch (Exception e) {
+			throw new JenkinsException(e);
+		}
+	}
+	
+	@Override
+	public void createCredentialsByXml(String id, String username, String password, String desc) throws JenkinsException {
+		try {
+			JenkinsHttpClient client = new JenkinsHttpClient(new URI(jenkinsUrl), jenkinsUser, jenkinsPassword);
+			String req = "<com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl>"
+									 + "<scope>GLOBAL</scope>"
+									 + "<id>" + id + "</id>"
+									 + "<description>" + desc + "</description>"
+									 + "<username>" + username + "</username>"
+									 + "<password>" + password + "</password>"
+							 + "</com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl>";
+			client.post_xml("credentials/store/system/domain/_/createCredentials", req,  true);
 		} catch (Exception e) {
 			throw new JenkinsException(e);
 		}
